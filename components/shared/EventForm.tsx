@@ -41,12 +41,14 @@ type EventFormProps = {
 
 const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([]);
-  const initialValues = event && type === 'Update'
-  ? {...event,
-    startDateTime: new Date(event.startDateTime),
-    endDateTime: new Date(event.endDateTime),
-  }
-  : eventDefaultValues;
+  const initialValues =
+    event && type === "Update"
+      ? {
+          ...event,
+          startDateTime: new Date(event.startDateTime),
+          endDateTime: new Date(event.endDateTime),
+        }
+      : eventDefaultValues;
   const router = useRouter();
 
   const { startUpload } = useUploadThing("imageUploader");
@@ -72,11 +74,11 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
     if (type === "Create") {
       try {
         const newEvent = await createEvent({
-          event:{ ...values, imageUrl: uploadedImageUrl },
+          event: { ...values, imageUrl: uploadedImageUrl },
           userId,
-          path: '/profile',
-        })
-        if (newEvent){
+          path: "/profile",
+        });
+        if (newEvent) {
           form.reset();
           router.push(`/events/${newEvent._id}`);
         }
@@ -86,15 +88,15 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
     }
 
     if (type === "Update") {
-      if(!eventId) {
+      if (!eventId) {
         router.back();
         return;
-      };
+      }
 
       try {
         const updatedEvent = await updateEvent({
           userId,
-          event: { ...values, imageUrl: uploadedImageUrl, _id:eventId },
+          event: { ...values, imageUrl: uploadedImageUrl, _id: eventId },
           path: `/events/${eventId}`,
         });
         if (updatedEvent) {
@@ -227,7 +229,11 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                     </p>
                     <DatePicker
                       selected={field.value}
-                      onChange={(date: Date) => field.onChange(date)}
+                      onChange={(date: Date | null) => {
+                        if (date !== null) {
+                          field.onChange(date);
+                        }
+                      }}
                       showTimeSelect
                       timeInputLabel="Time:"
                       dateFormat="MM/dd/yyyy h:mm aa"
