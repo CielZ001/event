@@ -13,7 +13,7 @@ const Header = () => {
           <Image
             src="/assets/images/logo.svg"
             alt="Evently logo"
-            width={120}
+            width={128}
             height={38}
           />
         </Link>
@@ -24,15 +24,17 @@ const Header = () => {
         </SignedIn>
 
         <div className="flex w-32 justify-end gap-3">
-          <SignedOut>
-            <SignInButton>
-              <Button asChild className="rounded-full" size='lg'>Login</Button>
-            </SignInButton>
-          </SignedOut>
           <SignedIn>
-            <UserButton />
+            <UserButton afterSignOutUrl="/" />
             <MobileNav />
           </SignedIn>
+          <SignedOut>
+            <SignInButton>
+              <Button asChild className="rounded-full" size="lg">
+                <Link href="/sign-in">Login</Link>
+              </Button>
+            </SignInButton>
+          </SignedOut>
         </div>
       </div>
     </header>
